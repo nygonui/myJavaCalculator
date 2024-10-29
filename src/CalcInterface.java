@@ -4,6 +4,8 @@ import java.awt.event.*;
 public class CalcInterface implements ActionListener {
 
     private final Frame frame = new Frame();
+    private CalcFunctionalities myFunctionalities = new CalcFunctionalities(this);
+
     final int buttonDimension = 43;
 
     /*
@@ -12,6 +14,8 @@ public class CalcInterface implements ActionListener {
     * [x] - Tentar substituir tudo o que se repete muitas vezes por laços, métodos e/ou arrays
     * [x] - Implementar uma variável que guarda os valores selecionados e display na tela esse valor
     * [] - Implementar as funcionalidades da calculadora
+    *   [] - Resolver: Depois de escolher os valores da esquerda, da direita e escolher a operação, quando aperta o
+    *       botão de igual, substui tudo no display por "=" (o cálculo está resolvendo certo, pois no terminal ele retorna o valor certo)
     * [] - Organizar melhor o códifo, aplicar melhor os conceitos de OOP (está tudo muito aqui, na classe da calculadora)
     * */
 
@@ -38,7 +42,6 @@ public class CalcInterface implements ActionListener {
     private void initNumbersButtons(){
         for (int i = 0; i < this.numbers.length; i++){
             Button b = new Button(Integer.toString(i));
-            System.out.println(i);
             this.numbers[i] = b;
         }
     }
@@ -130,7 +133,6 @@ public class CalcInterface implements ActionListener {
     }
 
     private void addListenersInAllKeys(){
-        int i = 0;
         for(Button operation : this.operations){
             operation.addActionListener(this);
         }
@@ -145,11 +147,27 @@ public class CalcInterface implements ActionListener {
 
     }
 
+    public String getTextFieldValue(){
+        return this.text;
+    }
+
+    public void setTextFieldValue(String text){
+        this.text = text;
+    }
+
     public void actionPerformed(ActionEvent e){
         if(e.getActionCommand().equals("=")){
-            PerformOperations p = new PerformOperations(this.text);
+            this.tf.setText("");
+            myFunctionalities.init(this.text);
+            this.tf.setText(Double.toString(myFunctionalities.result));
+            this.text = "";
         }
-        this.text += e.getActionCommand();
-        this.tf.setText(this.text);
+        if(e.getActionCommand().equals("C")){
+            myFunctionalities.deleteAll();
+        }
+        else {
+            this.text += e.getActionCommand();
+            this.tf.setText(this.text);
+        }
     }
 }
