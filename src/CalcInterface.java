@@ -1,94 +1,155 @@
-import org.w3c.dom.Text;
-
 import java.awt.*;
+import java.awt.event.*;
 
-public class CalcInterface {
+public class CalcInterface implements ActionListener {
 
-    final int width = 308;
-    final int height = 421;
-
-    private Frame frame = new Frame();
+    private final Frame frame = new Frame();
     final int buttonDimension = 43;
-    Button b0 = new Button("0");
-    Button b1 = new Button("1");
-    Button b2 = new Button("2");
-    Button b3 = new Button("3");
-    Button b4 = new Button("4");
-    Button b5 = new Button("5");
-    Button b6 = new Button("6");
-    Button b7 = new Button("7");
-    Button b8 = new Button("8");
-    Button b9 = new Button("9");
-    Button comma = new Button(",");
-    Button opResult = new Button("=");
-    Button opChangePositivity = new Button("+/-");
-    Button opAdd = new Button("+");
-    Button opSub = new Button("-");
-    Button opMult = new Button("x");
-    Button opDivi = new Button("/");
-    Button actDeleteLastDigit = new Button("<x");
-    Button actDeleteAll = new Button("C");
 
-    TextField tf = new TextField();
+    /*
+    * TO-DO
+    * [x] - Substituir as variáveis dos botões para array e criar métodos para inicializar eles se possível
+    * [x] - Tentar substituir tudo o que se repete muitas vezes por laços, métodos e/ou arrays
+    * [x] - Implementar uma variável que guarda os valores selecionados e display na tela esse valor
+    * [] - Implementar as funcionalidades da calculadora
+    * [] - Organizar melhor o códifo, aplicar melhor os conceitos de OOP (está tudo muito aqui, na classe da calculadora)
+    * */
 
+    private final Button[] numbers = new Button[10];
+    private final Button[] operations = new Button[6];
+    private final Button[] otherButtons = new Button[3];
+    private final TextField tf = new TextField();
+    private String text = "";
 
     public CalcInterface(){
-        this.b0.setBounds(103, 341, buttonDimension, buttonDimension);
-        this.b1.setBounds(43, 285, buttonDimension, buttonDimension);
-        this.b2.setBounds(103, 285, buttonDimension, buttonDimension);
-        this.b3.setBounds(163, 285, buttonDimension, buttonDimension);
-        this.b4.setBounds(43, 229, buttonDimension, buttonDimension);
-        this.b5.setBounds(103, 229, buttonDimension, buttonDimension);
-        this.b6.setBounds(163, 229, buttonDimension, buttonDimension);
-        this.b7.setBounds(43, 173, buttonDimension, buttonDimension);
-        this.b8.setBounds(103, 173, buttonDimension, buttonDimension);
-        this.b9.setBounds(163, 173, buttonDimension, buttonDimension);
+        this.initNumbersButtons();
+        this.initOperationsButtons();
+        this.initOtherButtons();
+        this.setBoundsForComponentsInterface();
+        this.addListenersInAllKeys();
 
-        this.comma.setBounds(163, 341, buttonDimension, buttonDimension);
-        this.opChangePositivity.setBounds(42, 341, buttonDimension, buttonDimension);
-        this.opResult.setBounds(223, 285, 43, 99);
-        this.opAdd.setBounds(223, 229, buttonDimension, buttonDimension);
-        this.opSub.setBounds(223, 173, buttonDimension, buttonDimension);
-        this.opMult.setBounds(223, 117, buttonDimension, buttonDimension);
-        this.opDivi.setBounds(163, 117, buttonDimension, buttonDimension);
-        this.actDeleteLastDigit.setBounds(103, 117, buttonDimension, buttonDimension);
-        this.actDeleteAll.setBounds(43, 117, buttonDimension, buttonDimension);
-
-        this.tf.setBounds(44, 37, 222, 54);
-    }
-
-    public void init(){
-        this.frame.setSize(this.width, this.height);
-
-        // Add Buttons on Screen
-        this.frame.add(this.b0);
-        this.frame.add(this.b1);
-        this.frame.add(this.b2);
-        this.frame.add(this.b3);
-        this.frame.add(this.b4);
-        this.frame.add(this.b5);
-        this.frame.add(this.b6);
-        this.frame.add(this.b7);
-        this.frame.add(this.b8);
-        this.frame.add(this.b9);
-
-        // Add other buttons
-        this.frame.add(this.comma);
-        this.frame.add(this.opChangePositivity);
-        this.frame.add(this.opResult);
-        this.frame.add(this.opAdd);
-        this.frame.add(this.opSub);
-        this.frame.add(this.opMult);
-        this.frame.add(this.opDivi);
-        this.frame.add(this.actDeleteLastDigit);
-        this.frame.add(this.actDeleteAll);
-
-        // Add TextField on Screen
-        this.frame.add(this.tf);
+        this.frame.setSize(308, 421);
+        this.addComponentsToScreen();
 
         this.frame.setLayout(null);
         this.frame.setVisible(true);
     }
+
+    private void initNumbersButtons(){
+        for (int i = 0; i < this.numbers.length; i++){
+            Button b = new Button(Integer.toString(i));
+            System.out.println(i);
+            this.numbers[i] = b;
+        }
+    }
+
+    private void initOperationsButtons(){
+        for (int i = 0; i < this.operations.length; i++){
+            /*
+            * operations[0] = Result (igual, "=")
+            * operations[1] = Change Positivity ("+/-")
+            * operations[2] = Add (soma, "+")
+            * operations[3] = Subtraction (subtração, "-")
+            * operations[4] = Multiplication (mutiplicação, "x")
+            * operations[5] = Division (divisão, "/")
+            * */
+            this.operations[i] = switch (i){
+                case 0 -> new Button("=");
+                case 1 -> new Button("+/-");
+                case 2 -> new Button("+");
+                case 3 -> new Button("-");
+                case 4 -> new Button("x");
+                case 5 -> new Button("/");
+                default -> new Button();
+            };
+        }
+    }
+
+    private void initOtherButtons(){
+        /*
+        * otherButtons[0] = comma (",")
+        * otherButtons[1] = delete last digit ("<x")
+        * otherButtons[2] = delete all ("C")
+        * */
+        this.otherButtons[0] = new Button(",");
+        this.otherButtons[1] = new Button("<x");
+        this.otherButtons[2] = new Button("C");
+    }
+
+    private void setBoundsForComponentsInterface(){
+        this.numbers[0].setBounds(103, 341, buttonDimension, buttonDimension);
+        this.numbers[1].setBounds(43, 285, buttonDimension, buttonDimension);
+        this.numbers[2].setBounds(103, 285, buttonDimension, buttonDimension);
+        this.numbers[3].setBounds(163, 285, buttonDimension, buttonDimension);
+        this.numbers[4].setBounds(43, 229, buttonDimension, buttonDimension);
+        this.numbers[5].setBounds(103, 229, buttonDimension, buttonDimension);
+        this.numbers[6].setBounds(163, 229, buttonDimension, buttonDimension);
+        this.numbers[7].setBounds(43, 173, buttonDimension, buttonDimension);
+        this.numbers[8].setBounds(103, 173, buttonDimension, buttonDimension);
+        this.numbers[9].setBounds(163, 173, buttonDimension, buttonDimension);
+
+        this.otherButtons[0].setBounds(163, 341, buttonDimension, buttonDimension);
+        this.operations[0].setBounds(223, 285, 43, 99);
+        this.operations[1].setBounds(42, 341, buttonDimension, buttonDimension);
+        this.operations[2].setBounds(223, 229, buttonDimension, buttonDimension);
+        this.operations[3].setBounds(223, 173, buttonDimension, buttonDimension);
+        this.operations[4].setBounds(223, 117, buttonDimension, buttonDimension);
+        this.operations[5].setBounds(163, 117, buttonDimension, buttonDimension);
+        this.otherButtons[1].setBounds(103, 117, buttonDimension, buttonDimension);
+        this.otherButtons[2].setBounds(43, 117, buttonDimension, buttonDimension);
+
+        this.tf.setBounds(44, 37, 222, 54);
+    }
+
+    private void addComponentsToScreen(){
+        // Add Buttons on Screen
+        this.frame.add(this.numbers[0]);
+        this.frame.add(this.numbers[1]);
+        this.frame.add(this.numbers[2]);
+        this.frame.add(this.numbers[3]);
+        this.frame.add(this.numbers[4]);
+        this.frame.add(this.numbers[5]);
+        this.frame.add(this.numbers[6]);
+        this.frame.add(this.numbers[7]);
+        this.frame.add(this.numbers[8]);
+        this.frame.add(this.numbers[9]);
+
+        // Add other buttons
+        this.frame.add(this.otherButtons[0]);
+        this.frame.add(this.operations[0]);
+        this.frame.add(this.operations[1]);
+        this.frame.add(this.operations[2]);
+        this.frame.add(this.operations[3]);
+        this.frame.add(this.operations[4]);
+        this.frame.add(this.operations[5]);
+        this.frame.add(this.otherButtons[1]);
+        this.frame.add(this.otherButtons[2]);
+
+        // Add TextField on Screen
+        this.frame.add(this.tf);
+    }
+
+    private void addListenersInAllKeys(){
+        int i = 0;
+        for(Button operation : this.operations){
+            operation.addActionListener(this);
+        }
+
+        for(Button number: this.numbers){
+            number.addActionListener(this);
+        }
+
+        for(Button otherButton: this.otherButtons){
+            otherButton.addActionListener(this);
+        }
+
+    }
+
+    public void actionPerformed(ActionEvent e){
+        if(e.getActionCommand().equals("=")){
+            PerformOperations p = new PerformOperations(this.text);
+        }
+        this.text += e.getActionCommand();
+        this.tf.setText(this.text);
+    }
 }
-
-
