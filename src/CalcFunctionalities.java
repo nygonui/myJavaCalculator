@@ -48,7 +48,5 @@ public class CalcFunctionalities {
 
     public void deleteAll(){
         myCalcInterface.setTextFieldValue("");
-        this.rightValueStr = "";
-        this.leftValueStr = "";
     }
 }

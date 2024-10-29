@@ -3,7 +3,7 @@ import java.awt.event.*;
 
 public class CalcInterface implements ActionListener {
 
-    private final Frame frame = new Frame();
+    private final Frame frame = new Frame("Nygonui's Calc");
     private CalcFunctionalities myFunctionalities = new CalcFunctionalities(this);
 
     final int buttonDimension = 43;
@@ -70,11 +70,11 @@ public class CalcInterface implements ActionListener {
 
     private void initOtherButtons(){
         /*
-        * otherButtons[0] = comma (",")
+        * otherButtons[0] = decimal (".")
         * otherButtons[1] = delete last digit ("<x")
         * otherButtons[2] = delete all ("C")
         * */
-        this.otherButtons[0] = new Button(",");
+        this.otherButtons[0] = new Button(".");
         this.otherButtons[1] = new Button("<x");
         this.otherButtons[2] = new Button("C");
     }
@@ -162,8 +162,9 @@ public class CalcInterface implements ActionListener {
             this.tf.setText(Double.toString(myFunctionalities.result));
             this.text = "";
         }
-        if(e.getActionCommand().equals("C")){
+        else if (e.getActionCommand().equals("C")){
             myFunctionalities.deleteAll();
+            this.tf.setText(this.text);
         }
         else {
             this.text += e.getActionCommand();
