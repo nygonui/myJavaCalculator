@@ -1,21 +1,24 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class CalcFunctionalities {
-    private String rightValueStr;
-    private String leftValueStr;
+    private double rightValue;
+    private double leftValue;
     private char operation;
     public double result;
-    private CalcInterface myCalcInterface;
+    private CalcUI myCalcUI;
 
-    CalcFunctionalities(CalcInterface calcInterface){
-        this.myCalcInterface = calcInterface;
+    CalcFunctionalities(CalcUI calcInterface){
+        this.myCalcUI = calcInterface;
     }
 
-    public void init(String text){
+    private void parseTextInValuesAndOperation(String text){
         String[] mySubString = text.split("[-+x/]");
 
-        this.leftValueStr = mySubString[0];
-        this.rightValueStr = mySubString[1];
-        double leftValue = Double.parseDouble(this.leftValueStr);
-        double rightValue = Double.parseDouble(this.rightValueStr);
+        String leftValueStr = mySubString[0];
+        String rightValueStr = mySubString[1];
+        this.leftValue = Double.parseDouble(leftValueStr);
+        this.rightValue = Double.parseDouble(rightValueStr);
 
         int operationSignalPosition;
         if(leftValue == rightValue){
@@ -24,21 +27,16 @@ public class CalcFunctionalities {
         else {
             operationSignalPosition = text.indexOf(rightValueStr)-1;
         }
-
         this.operation = text.charAt(operationSignalPosition);
-
-        System.out.println(this.operation);
-
-        this.result = calculateTheResult(leftValue, rightValue);
-        System.out.println(this.result);
     }
 
-    private double calculateTheResult(double leftValue, double rightValue){
-        return switch (operation){
-            case '+' -> leftValue + rightValue;
-            case '-' -> leftValue - rightValue;
-            case 'x' -> leftValue * rightValue;
-            case '/' -> leftValue / rightValue;
+    public void calculateTheResult(String text){
+        this.parseTextInValuesAndOperation(text);
+        this.result =  switch (this.operation){
+            case '+' -> this.leftValue + this.rightValue;
+            case '-' -> this.leftValue - this.rightValue;
+            case 'x' -> this.leftValue * this.rightValue;
+            case '/' -> this.leftValue / this.rightValue;
             default -> {
                 System.out.println("Sinal da operação passada é inválido");
                 yield 0.0;
@@ -47,6 +45,26 @@ public class CalcFunctionalities {
     }
 
     public void deleteAll(){
-        myCalcInterface.setTextFieldValue("");
+        myCalcUI.setTextFieldValue("");
     }
+
+    public void deleteLastChar(String text){
+        if(text.isEmpty()){
+            System.out.println("Is Empty");
+            return;
+        }
+
+        char[] c = text.toCharArray();
+        c[c.length-1] = ' ';
+        String myNewStr = Arrays.toString(c);
+        myNewStr = myNewStr.replaceAll("[\\[\\],]", "");
+        myNewStr = myNewStr.replaceAll("[ ]", "");
+        myCalcUI.setTextFieldValue(myNewStr);
+    }
+
+//    public void changePosivity(){}
+
+//    public static void main(String[] args){
+//        deleteLastChar("1234+789");
+//    }
 }

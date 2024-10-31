@@ -1,23 +1,12 @@
 import java.awt.*;
 import java.awt.event.*;
 
-public class CalcInterface implements ActionListener {
+public class CalcUI implements ActionListener {
 
     private final Frame frame = new Frame("Nygonui's Calc");
     private CalcFunctionalities myFunctionalities = new CalcFunctionalities(this);
 
     final int buttonDimension = 43;
-
-    /*
-    * TO-DO
-    * [x] - Substituir as variáveis dos botões para array e criar métodos para inicializar eles se possível
-    * [x] - Tentar substituir tudo o que se repete muitas vezes por laços, métodos e/ou arrays
-    * [x] - Implementar uma variável que guarda os valores selecionados e display na tela esse valor
-    * [] - Implementar as funcionalidades da calculadora
-    *   [] - Resolver: Depois de escolher os valores da esquerda, da direita e escolher a operação, quando aperta o
-    *       botão de igual, substui tudo no display por "=" (o cálculo está resolvendo certo, pois no terminal ele retorna o valor certo)
-    * [] - Organizar melhor o códifo, aplicar melhor os conceitos de OOP (está tudo muito aqui, na classe da calculadora)
-    * */
 
     private final Button[] numbers = new Button[10];
     private final Button[] operations = new Button[6];
@@ -25,7 +14,7 @@ public class CalcInterface implements ActionListener {
     private final TextField tf = new TextField();
     private String text = "";
 
-    public CalcInterface(){
+    public CalcUI(){
         this.initNumbersButtons();
         this.initOperationsButtons();
         this.initOtherButtons();
@@ -158,12 +147,16 @@ public class CalcInterface implements ActionListener {
     public void actionPerformed(ActionEvent e){
         if(e.getActionCommand().equals("=")){
             this.tf.setText("");
-            myFunctionalities.init(this.text);
+            myFunctionalities.calculateTheResult(this.text);
             this.tf.setText(Double.toString(myFunctionalities.result));
             this.text = "";
         }
         else if (e.getActionCommand().equals("C")){
             myFunctionalities.deleteAll();
+            this.tf.setText(this.text);
+        }
+        else if(e.getActionCommand().equals("<x")){
+            myFunctionalities.deleteLastChar(this.text);
             this.tf.setText(this.text);
         }
         else {
