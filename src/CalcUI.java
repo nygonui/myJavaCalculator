@@ -145,11 +145,19 @@ public class CalcUI implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e){
-        if(e.getActionCommand().equals("=")){
+        if(Util.inOperationArray(e.getActionCommand())){
+            double leftValue = Double.parseDouble(this.text); // transforma a string do valor em double
+            myFunctionalities.setLeftValue(leftValue); // seta o valor esquerda la na classe de funcionalidades
+            myFunctionalities.setOperation(e.getActionCommand()); // seta a operação matemática na classe de funcionalidades
+
+            this.text += e.getActionCommand();
+            this.tf.setText(this.text);
+        }
+        else if(e.getActionCommand().equals("=")){
             this.tf.setText("");
             myFunctionalities.calculateTheResult(this.text);
             this.tf.setText(Double.toString(myFunctionalities.result));
-            this.text = "";
+            this.text = Double.toString(myFunctionalities.result);
         }
         else if (e.getActionCommand().equals("C")){
             myFunctionalities.deleteAll();
@@ -157,6 +165,10 @@ public class CalcUI implements ActionListener {
         }
         else if(e.getActionCommand().equals("<x")){
             myFunctionalities.deleteLastChar(this.text);
+            this.tf.setText(this.text);
+        }
+        else if(e.getActionCommand().equals("+/-")){
+            myFunctionalities.changePositivity(this.text);
             this.tf.setText(this.text);
         }
         else {
