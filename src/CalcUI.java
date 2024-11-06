@@ -136,10 +136,6 @@ public class CalcUI implements ActionListener {
 
     }
 
-    public String getTextFieldValue(){
-        return this.text;
-    }
-
     public void setTextFieldValue(String text){
         this.text = text;
     }
