@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 
-public class CalcUI implements ActionListener {
+public class CalcUI extends WindowAdapter implements ActionListener {
 
     private final Frame frame = new Frame("Nygonui's Calc");
     private CalcFunctionalities myFunctionalities = new CalcFunctionalities(this);
@@ -21,7 +21,10 @@ public class CalcUI implements ActionListener {
         this.setBoundsForComponentsInterface();
         this.addListenersInAllKeys();
 
+        this.frame.addWindowListener(this);
+
         this.frame.setSize(308, 421);
+        this.frame.setResizable(false);
         this.addComponentsToScreen();
 
         this.frame.setLayout(null);
@@ -172,4 +175,9 @@ public class CalcUI implements ActionListener {
             this.tf.setText(this.text);
         }
     }
+
+    public void windowClosing(WindowEvent e){
+        this.frame.dispose();
+    }
+
 }
