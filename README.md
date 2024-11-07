@@ -8,6 +8,8 @@ to put in practice what I learned. I searched for "Java projects ideas" in googl
 found this page: [14 Java Projects For All Levels: Beginner, Intermediate, & Advanced](https://www.datacamp.com/blog/java-projects-for-all-levels).
 So I started with the first and here we are.
 
+![img.png](imgs/img.png)
+
 ## My Dev Environment 
 In the present moment if I run `java --version` in my terminal the result it is as follows:
 ```shell
